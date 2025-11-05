@@ -1,0 +1,457 @@
+{
+  "S001": [
+    {
+      "id": "SES001",
+      "studentId": "S001",
+      "date": "2025-11-03",
+      "subject": "Math - SAT Prep",
+      "tutorId": "98765",
+      "duration": "1 hour",
+      "notes": "Reviewed quadratic equations and word problems. Practice test score: 680/800. Making great progress!"
+    },
+    {
+      "id": "SES002",
+      "studentId": "S001",
+      "date": "2025-11-01",
+      "subject": "Math - Algebra II",
+      "tutorId": "98765",
+      "duration": "1 hour",
+      "notes": "Worked on polynomial factoring and rational expressions."
+    },
+    {
+      "id": "SES003",
+      "studentId": "S001",
+      "date": "2025-10-30",
+      "subject": "Physics - Mechanics",
+      "tutorId": "76543",
+      "duration": "1.5 hours",
+      "notes": "Lab report review and Newton's laws. Covered free body diagrams."
+    },
+    {
+      "id": "SES004",
+      "studentId": "S001",
+      "date": "2025-10-28",
+      "subject": "Math - SAT Prep",
+      "tutorId": "98765",
+      "duration": "1 hour",
+      "notes": "Full practice test - timed section. Identified areas for improvement."
+    },
+    {
+      "id": "SES005",
+      "studentId": "S001",
+      "date": "2025-10-25",
+      "subject": "Physics - Vectors",
+      "tutorId": "76543",
+      "duration": "1 hour",
+      "notes": "Vector addition and decomposition. Connected to math concepts."
+    },
+    {
+      "id": "SES006",
+      "studentId": "S001",
+      "date": "2025-10-23",
+      "subject": "Math - Trigonometry",
+      "tutorId": "98765",
+      "duration": "1 hour",
+      "notes": "Unit circle and trig identities. Preparing for SAT Math 2."
+    },
+    {
+      "id": "SES007",
+      "studentId": "S001",
+      "date": "2025-10-20",
+      "subject": "Physics - Lab Report",
+      "tutorId": "76543",
+      "duration": "1 hour",
+      "notes": "Edited lab report on projectile motion. Improved analysis section."
+    }
+  ],
+  "S002": [
+    {
+      "id": "SES008",
+      "studentId": "S002",
+      "date": "2025-11-02",
+      "subject": "Reading Comprehension",
+      "tutorId": "87654",
+      "duration": "1 hour",
+      "notes": "Practiced inference questions and vocabulary in context. Used audiobook supplement."
+    },
+    {
+      "id": "SES009",
+      "studentId": "S002",
+      "date": "2025-10-29",
+      "subject": "Creative Writing",
+      "tutorId": "87654",
+      "duration": "1 hour",
+      "notes": "Excellent essay on environmental conservation. Submitted to school lit magazine."
+    },
+    {
+      "id": "SES010",
+      "studentId": "S002",
+      "date": "2025-10-25",
+      "subject": "Pre-Algebra",
+      "tutorId": "98765",
+      "duration": "45 min",
+      "notes": "Quick help with order of operations homework. All correct!"
+    },
+    {
+      "id": "SES011",
+      "studentId": "S002",
+      "date": "2025-10-22",
+      "subject": "Reading - The Giver",
+      "tutorId": "87654",
+      "duration": "1 hour",
+      "notes": "Discussed themes and symbolism. Working on book report."
+    },
+    {
+      "id": "SES012",
+      "studentId": "S002",
+      "date": "2025-10-18",
+      "subject": "Vocabulary Building",
+      "tutorId": "87654",
+      "duration": "1 hour",
+      "notes": "Context clues strategies. Created flashcards on Quizlet."
+    },
+    {
+      "id": "SES013",
+      "studentId": "S002",
+      "date": "2025-10-15",
+      "subject": "Essay Writing",
+      "tutorId": "87654",
+      "duration": "1.5 hours",
+      "notes": "Structured 5-paragraph essay. Topic sentences and transitions."
+    },
+    {
+      "id": "SES014",
+      "studentId": "S002",
+      "date": "2025-10-11",
+      "subject": "Reading Fluency",
+      "tutorId": "87654",
+      "duration": "1 hour",
+      "notes": "Practiced reading aloud. Working on pacing and expression."
+    }
+  ],
+  "S003": [
+    {
+      "id": "SES015",
+      "studentId": "S003",
+      "date": "2025-11-03",
+      "subject": "AP Calculus BC",
+      "tutorId": "98765",
+      "duration": "1.5 hours",
+      "notes": "Integration by parts and series convergence tests. College-level work!"
+    },
+    {
+      "id": "SES016",
+      "studentId": "S003",
+      "date": "2025-11-02",
+      "subject": "AP Chemistry",
+      "tutorId": "76543",
+      "duration": "1.5 hours",
+      "notes": "Thermodynamics and Gibbs free energy problems. Midterm prep."
+    },
+    {
+      "id": "SES017",
+      "studentId": "S003",
+      "date": "2025-10-31",
+      "subject": "AP Calculus BC",
+      "tutorId": "98765",
+      "duration": "1 hour",
+      "notes": "Review session for upcoming midterm. All topics covered."
+    },
+    {
+      "id": "SES018",
+      "studentId": "S003",
+      "date": "2025-10-28",
+      "subject": "AP Chemistry - Lab",
+      "tutorId": "76543",
+      "duration": "2 hours",
+      "notes": "Calorimetry lab. Calculated enthalpy of reaction."
+    },
+    {
+      "id": "SES019",
+      "studentId": "S003",
+      "date": "2025-10-25",
+      "subject": "AP Calculus BC",
+      "tutorId": "98765",
+      "duration": "1.5 hours",
+      "notes": "Taylor series and Maclaurin series. Worked through practice problems."
+    },
+    {
+      "id": "SES020",
+      "studentId": "S003",
+      "date": "2025-10-22",
+      "subject": "AP Chemistry",
+      "tutorId": "76543",
+      "duration": "1.5 hours",
+      "notes": "Electrochemistry and galvanic cells. Very strong understanding."
+    },
+    {
+      "id": "SES021",
+      "studentId": "S003",
+      "date": "2025-10-18",
+      "subject": "AP Calculus BC",
+      "tutorId": "98765",
+      "duration": "1 hour",
+      "notes": "Parametric equations and polar coordinates. Ready for exam."
+    }
+  ],
+  "S004": [
+    {
+      "id": "SES022",
+      "studentId": "S004",
+      "date": "2025-11-02",
+      "subject": "Pre-Algebra",
+      "tutorId": "98765",
+      "duration": "1 hour",
+      "notes": "Fractions, decimals, percentages. Used basketball stats for examples."
+    },
+    {
+      "id": "SES023",
+      "studentId": "S004",
+      "date": "2025-11-01",
+      "subject": "English - Book Report",
+      "tutorId": "87654",
+      "duration": "1 hour",
+      "notes": "Outline for 'The Giver' book report completed. Due Nov 5."
+    },
+    {
+      "id": "SES024",
+      "studentId": "S004",
+      "date": "2025-10-28",
+      "subject": "Pre-Algebra",
+      "tutorId": "98765",
+      "duration": "1 hour",
+      "notes": "Improved focus today! Covered ratios and proportions."
+    },
+    {
+      "id": "SES025",
+      "studentId": "S004",
+      "date": "2025-10-25",
+      "subject": "Reading Comprehension",
+      "tutorId": "87654",
+      "duration": "45 min",
+      "notes": "Finished reading 'The Giver'. Discussion of themes."
+    },
+    {
+      "id": "SES026",
+      "studentId": "S004",
+      "date": "2025-10-21",
+      "subject": "Pre-Algebra - Test Prep",
+      "tutorId": "98765",
+      "duration": "1 hour",
+      "notes": "Review for chapter test. Practice problems on equations."
+    },
+    {
+      "id": "SES027",
+      "studentId": "S004",
+      "date": "2025-10-18",
+      "subject": "Vocabulary",
+      "tutorId": "87654",
+      "duration": "1 hour",
+      "notes": "Context clues practice. Created study guide for quiz."
+    },
+    {
+      "id": "SES028",
+      "studentId": "S004",
+      "date": "2025-10-14",
+      "subject": "Pre-Algebra",
+      "tutorId": "98765",
+      "duration": "1 hour",
+      "notes": "Order of operations and integer operations. Good progress!"
+    }
+  ],
+  "S005": [
+    {
+      "id": "SES029",
+      "studentId": "S005",
+      "date": "2025-11-03",
+      "subject": "College Essay Review",
+      "tutorId": "87654",
+      "duration": "2 hours",
+      "notes": "Final edits on Yale essay. Personal statement is excellent!"
+    },
+    {
+      "id": "SES030",
+      "studentId": "S005",
+      "date": "2025-10-31",
+      "subject": "SAT Prep - Math",
+      "tutorId": "98765",
+      "duration": "1.5 hours",
+      "notes": "Full practice test. Scored 790/800. Ready for December test."
+    },
+    {
+      "id": "SES031",
+      "studentId": "S005",
+      "date": "2025-10-28",
+      "subject": "Interview Prep",
+      "tutorId": "87654",
+      "duration": "1 hour",
+      "notes": "Mock interview for Yale. Very polished and confident."
+    },
+    {
+      "id": "SES032",
+      "studentId": "S005",
+      "date": "2025-10-25",
+      "subject": "College Essay - Supplementals",
+      "tutorId": "87654",
+      "duration": "2 hours",
+      "notes": "Wrote 'Why Yale' and 'Why Harvard' supplements. Strong narratives."
+    },
+    {
+      "id": "SES033",
+      "studentId": "S005",
+      "date": "2025-10-21",
+      "subject": "SAT Prep - Reading",
+      "tutorId": "87654",
+      "duration": "1.5 hours",
+      "notes": "Evidence-based reading. Scored 780/800 on practice."
+    },
+    {
+      "id": "SES034",
+      "studentId": "S005",
+      "date": "2025-10-18",
+      "subject": "College Essay - Personal Statement",
+      "tutorId": "87654",
+      "duration": "2 hours",
+      "notes": "Drafted Common App essay about music and resilience."
+    },
+    {
+      "id": "SES035",
+      "studentId": "S005",
+      "date": "2025-10-14",
+      "subject": "SAT Prep - Writing",
+      "tutorId": "87654",
+      "duration": "1.5 hours",
+      "notes": "Grammar rules and essay structure. Perfect score on practice!"
+    }
+  ],
+  "S006": [
+    {
+      "id": "SES036",
+      "studentId": "S006",
+      "date": "2025-11-02",
+      "subject": "Math - Geometry",
+      "tutorId": "98765",
+      "duration": "1 hour",
+      "notes": "Area and perimeter problems. Used game design contexts."
+    },
+    {
+      "id": "SES037",
+      "studentId": "S006",
+      "date": "2025-11-01",
+      "subject": "ESL - Academic Vocabulary",
+      "tutorId": "65432",
+      "duration": "1 hour",
+      "notes": "Standardized test vocabulary. Making excellent progress!"
+    },
+    {
+      "id": "SES038",
+      "studentId": "S006",
+      "date": "2025-10-29",
+      "subject": "Math - Fractions",
+      "tutorId": "98765",
+      "duration": "1 hour",
+      "notes": "Fraction operations. Connected to game resource management."
+    },
+    {
+      "id": "SES039",
+      "studentId": "S006",
+      "date": "2025-10-25",
+      "subject": "ESL - Reading Comprehension",
+      "tutorId": "65432",
+      "duration": "1 hour",
+      "notes": "Practiced inference and main idea questions. Good improvement."
+    },
+    {
+      "id": "SES040",
+      "studentId": "S006",
+      "date": "2025-10-22",
+      "subject": "Math - Word Problems",
+      "tutorId": "98765",
+      "duration": "1 hour",
+      "notes": "Multi-step word problems. Scored 90% on practice quiz!"
+    },
+    {
+      "id": "SES041",
+      "studentId": "S006",
+      "date": "2025-10-18",
+      "subject": "ESL - Writing",
+      "tutorId": "65432",
+      "duration": "1.5 hours",
+      "notes": "Paragraph structure and topic sentences. Great progress."
+    },
+    {
+      "id": "SES042",
+      "studentId": "S006",
+      "date": "2025-10-15",
+      "subject": "Math - Decimals",
+      "tutorId": "98765",
+      "duration": "1 hour",
+      "notes": "Decimal operations and place value. Very strong!"
+    }
+  ],
+  "S007": [
+    {
+      "id": "SES043",
+      "studentId": "S007",
+      "date": "2025-10-29",
+      "subject": "English - Art History Essay",
+      "tutorId": "87654",
+      "duration": "1.5 hours",
+      "notes": "Excellent analysis of Renaissance techniques. A+ work!"
+    },
+    {
+      "id": "SES044",
+      "studentId": "S007",
+      "date": "2025-10-27",
+      "subject": "Biology - Cell Structure",
+      "tutorId": "76543",
+      "duration": "1 hour",
+      "notes": "Used visual diagrams and art analogies. Much better understanding."
+    },
+    {
+      "id": "SES045",
+      "studentId": "S007",
+      "date": "2025-10-25",
+      "subject": "English - College Essay",
+      "tutorId": "87654",
+      "duration": "2 hours",
+      "notes": "Personal statement about music and artistic vision. Strong narrative."
+    },
+    {
+      "id": "SES046",
+      "studentId": "S007",
+      "date": "2025-10-22",
+      "subject": "Biology - Photosynthesis",
+      "tutorId": "76543",
+      "duration": "1 hour",
+      "notes": "Lab report on photosynthesis rates. Good data analysis."
+    },
+    {
+      "id": "SES047",
+      "studentId": "S007",
+      "date": "2025-10-18",
+      "subject": "English - Literary Analysis",
+      "tutorId": "87654",
+      "duration": "1.5 hours",
+      "notes": "Analysis of symbolism in 'The Great Gatsby'. Insightful."
+    },
+    {
+      "id": "SES048",
+      "studentId": "S007",
+      "date": "2025-10-15",
+      "subject": "Biology - Genetics",
+      "tutorId": "76543",
+      "duration": "1 hour",
+      "notes": "Punnett squares and inheritance patterns. Improving!"
+    },
+    {
+      "id": "SES049",
+      "studentId": "S007",
+      "date": "2025-10-11",
+      "subject": "English - Creative Writing",
+      "tutorId": "87654",
+      "duration": "1.5 hours",
+      "notes": "Short story workshop. Excellent descriptive language."
+    }
+  ]
+}

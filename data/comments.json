@@ -1,0 +1,163 @@
+{
+  "S001": [
+    {
+      "id": "C001",
+      "studentId": "S001",
+      "tutorId": "98765",
+      "timestamp": "2025-11-03T14:30:00Z",
+      "body": "Emma crushed the practice SAT section today! She scored 680/800 - huge improvement from last month. Recommended resources: https://khanacademy.org/sat for extra practice. College Board also has free practice tests: https://collegeboard.org/sat/practice"
+    },
+    {
+      "id": "C002",
+      "studentId": "S001",
+      "tutorId": "76543",
+      "timestamp": "2025-10-30T16:45:00Z",
+      "body": "Physics concepts are clicking! Need to work on free body diagrams a bit more. @Sarah - are you covering vectors in your math sessions? Would help reinforce what we're doing in physics."
+    },
+    {
+      "id": "C003",
+      "studentId": "S001",
+      "tutorId": "98765",
+      "timestamp": "2025-10-28T10:15:00Z",
+      "body": "Parent wants weekly updates via email (jennifer.w@email.com). Will send progress reports every Friday. Also FYI - Science Olympiad competition is Nov 12, so Emma might need to reschedule that week."
+    }
+  ],
+  "S002": [
+    {
+      "id": "C004",
+      "studentId": "S002",
+      "tutorId": "87654",
+      "timestamp": "2025-11-02T15:20:00Z",
+      "body": "James is making excellent progress with reading comp! Recommend keeping sessions at 1 hour max due to focus challenges. Using audiobooks as supplement - check out his favorites: https://audible.com/pd/The-Giver"
+    },
+    {
+      "id": "C005",
+      "studentId": "S002",
+      "tutorId": "87654",
+      "timestamp": "2025-10-29T14:00:00Z",
+      "body": "His creative writing is phenomenal - submitted piece to school lit magazine. Check out his blog: https://jameswritesstories.com. Thinking about having him enter a national writing contest."
+    },
+    {
+      "id": "C006",
+      "studentId": "S002",
+      "tutorId": "98765",
+      "timestamp": "2025-10-25T11:30:00Z",
+      "body": "@Michael - heads up that James might need your help with an English essay this week. His mom (carlos.m@email.com) mentioned it when I saw her. Due date is Oct 30."
+    }
+  ],
+  "S003": [
+    {
+      "id": "C007",
+      "studentId": "S003",
+      "tutorId": "98765",
+      "timestamp": "2025-11-03T17:00:00Z",
+      "body": "Sophia is ready for the AP Calc exam! Her understanding of series convergence is college-level. Recommend supplemental practice: https://apcentral.collegeboard.org/courses/ap-calculus-bc. Also working through MIT OpenCourseWare problems."
+    },
+    {
+      "id": "C008",
+      "studentId": "S003",
+      "tutorId": "76543",
+      "timestamp": "2025-11-02T16:30:00Z",
+      "body": "Chemistry midterm coming up Nov 15. Will schedule extra session week before. Also helping her prepare for MIT interview next month! Alum interviewer contact: alum@mit.edu"
+    },
+    {
+      "id": "C009",
+      "studentId": "S003",
+      "tutorId": "98765",
+      "timestamp": "2025-10-30T09:00:00Z",
+      "body": "Reminder: Sophia needs recommendation letter by Nov 10 for Berkeley early action. @Emily - are you writing one too? Parent wants to review draft: priya.patel@email.com"
+    }
+  ],
+  "S004": [
+    {
+      "id": "C010",
+      "studentId": "S004",
+      "tutorId": "98765",
+      "timestamp": "2025-11-02T14:45:00Z",
+      "body": "Liam is improving with consistency! Keep sessions to 1 hour max before basketball. Using sports stats to make math more engaging - calculated shooting percentages today and he loved it. Check out this tool: https://stats.nba.com for real examples."
+    },
+    {
+      "id": "C011",
+      "studentId": "S004",
+      "tutorId": "87654",
+      "timestamp": "2025-11-01T13:30:00Z",
+      "body": "Book report is coming along nicely. Due Nov 5. Will have him email draft to me by Nov 3. Contact: liam.thompson@student.edu. Also working on citation format - MLA style."
+    },
+    {
+      "id": "C012",
+      "studentId": "S004",
+      "tutorId": "98765",
+      "timestamp": "2025-10-28T14:00:00Z",
+      "body": "@Michael - Liam mentioned he's struggling with vocab homework. Can you reinforce context clues in your next session? His teacher also recommended Quizlet: https://quizlet.com/subject/vocabulary"
+    }
+  ],
+  "S005": [
+    {
+      "id": "C013",
+      "studentId": "S005",
+      "tutorId": "87654",
+      "timestamp": "2025-11-03T11:00:00Z",
+      "body": "College essay is really strong - reviewing final draft today. Yale early decision deadline is Nov 1, so we're cutting it close! Common App portal: https://commonapp.org. Parents want daily updates this week: jennifer.kim@email.com"
+    },
+    {
+      "id": "C014",
+      "studentId": "S005",
+      "tutorId": "98765",
+      "timestamp": "2025-10-31T16:00:00Z",
+      "body": "@Michael - can you review her personal statement from a humanities perspective? I'm helping with the \"why Yale\" supplement. She's also applying to Harvard and Princeton - essays due Nov 1."
+    },
+    {
+      "id": "C015",
+      "studentId": "S005",
+      "tutorId": "87654",
+      "timestamp": "2025-10-28T10:30:00Z",
+      "body": "Interview prep went well. Mock interview scheduled for Oct 30 with Yale alum. Reminded her to prepare questions about residential colleges. Resources: https://admissions.yale.edu/interview-faqs"
+    }
+  ],
+  "S006": [
+    {
+      "id": "C016",
+      "studentId": "S006",
+      "tutorId": "65432",
+      "timestamp": "2025-11-01T13:00:00Z",
+      "body": "Noah's English is improving rapidly! Working on academic vocabulary for standardized tests. Mom prefers updates in Spanish - contact: maria.garcia@email.com. Using Duolingo for supplemental practice: https://duolingo.com"
+    },
+    {
+      "id": "C017",
+      "studentId": "S006",
+      "tutorId": "98765",
+      "timestamp": "2025-11-02T15:30:00Z",
+      "body": "Math is definitely his strength! Scored 95% on last test. Using gaming contexts to teach - calculated damage-per-second in his favorite game today and he was fully engaged. Might recommend accelerated math track."
+    },
+    {
+      "id": "C018",
+      "studentId": "S006",
+      "tutorId": "65432",
+      "timestamp": "2025-10-29T14:15:00Z",
+      "body": "@Sarah - Noah mentioned he wants to learn game design. Any chance you could incorporate some basic programming concepts in math? Scratch might be perfect: https://scratch.mit.edu"
+    }
+  ],
+  "S007": [
+    {
+      "id": "C019",
+      "studentId": "S007",
+      "tutorId": "87654",
+      "timestamp": "2025-10-29T16:00:00Z",
+      "body": "Ava's art history essay is excellent - really insightful analysis of Renaissance techniques. Piano recital is Nov 15, so schedule will be tight next two weeks. Check her competition schedule: https://mtac.org/events"
+    },
+    {
+      "id": "C020",
+      "studentId": "S007",
+      "tutorId": "76543",
+      "timestamp": "2025-10-27T13:45:00Z",
+      "body": "Biology is challenging for her but we're making progress. Using visual diagrams and art analogies to explain cell structure. @Michael - any creative writing assignments that could incorporate science concepts?"
+    },
+    {
+      "id": "C021",
+      "studentId": "S007",
+      "tutorId": "87654",
+      "timestamp": "2025-10-25T11:00:00Z",
+      "body": "College application timeline: Juilliard pre-screening due Dec 1. Working on personal statement about how music informs her artistic vision. Parent wants weekly check-ins: robert.brown@email.com"
+    }
+  ]
+}

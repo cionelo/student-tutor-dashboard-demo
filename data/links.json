@@ -1,0 +1,114 @@
+[
+  {
+    "studentId": "S001",
+    "tutorId": "98765",
+    "role": "primary",
+    "subject": "Math",
+    "active": true,
+    "lastSeen": "2025-11-03"
+  },
+  {
+    "studentId": "S001",
+    "tutorId": "76543",
+    "role": "occasional",
+    "subject": "Physics",
+    "active": true,
+    "lastSeen": "2025-10-30"
+  },
+  {
+    "studentId": "S002",
+    "tutorId": "87654",
+    "role": "primary",
+    "subject": "Reading",
+    "active": true,
+    "lastSeen": "2025-11-02"
+  },
+  {
+    "studentId": "S002",
+    "tutorId": "98765",
+    "role": "occasional",
+    "subject": "Pre-Algebra",
+    "active": true,
+    "lastSeen": "2025-10-25"
+  },
+  {
+    "studentId": "S003",
+    "tutorId": "98765",
+    "role": "primary",
+    "subject": "Calculus",
+    "active": true,
+    "lastSeen": "2025-11-03"
+  },
+  {
+    "studentId": "S003",
+    "tutorId": "76543",
+    "role": "primary",
+    "subject": "Chemistry",
+    "active": true,
+    "lastSeen": "2025-11-02"
+  },
+  {
+    "studentId": "S004",
+    "tutorId": "87654",
+    "role": "primary",
+    "subject": "English",
+    "active": true,
+    "lastSeen": "2025-11-01"
+  },
+  {
+    "studentId": "S004",
+    "tutorId": "98765",
+    "role": "primary",
+    "subject": "Pre-Algebra",
+    "active": true,
+    "lastSeen": "2025-11-02"
+  },
+  {
+    "studentId": "S005",
+    "tutorId": "87654",
+    "role": "primary",
+    "subject": "Writing",
+    "active": true,
+    "lastSeen": "2025-11-03"
+  },
+  {
+    "studentId": "S005",
+    "tutorId": "98765",
+    "role": "occasional",
+    "subject": "SAT Prep",
+    "active": true,
+    "lastSeen": "2025-10-28"
+  },
+  {
+    "studentId": "S006",
+    "tutorId": "65432",
+    "role": "primary",
+    "subject": "ESL",
+    "active": true,
+    "lastSeen": "2025-11-01"
+  },
+  {
+    "studentId": "S006",
+    "tutorId": "98765",
+    "role": "primary",
+    "subject": "Math",
+    "active": true,
+    "lastSeen": "2025-11-02"
+  },
+  {
+    "studentId": "S007",
+    "tutorId": "87654",
+    "role": "primary",
+    "subject": "English",
+    "active": true,
+    "lastSeen": "2025-10-29"
+  },
+  {
+    "studentId": "S007",
+    "tutorId": "76543",
+    "role": "occasional",
+    "subject": "Biology",
+    "active": true,
+    "lastSeen": "2025-10-27"
+  }
+]

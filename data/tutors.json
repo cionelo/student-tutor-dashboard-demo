@@ -1,0 +1,57 @@
+[
+  {
+    "id": "16180339",
+    "firstName": "Admin",
+    "lastName": "User",
+    "email": "admin@tutoringcenter.org",
+    "phoneMobile": "555-0000",
+    "phoneHome": "555-0001",
+    "role": "admin",
+    "subjects": ["All Subjects"],
+    "status": "Active"
+  },
+  {
+    "id": "98765",
+    "firstName": "Sarah",
+    "lastName": "Johnson",
+    "email": "sarah.johnson@tutoringcenter.org",
+    "phoneMobile": "555-1234",
+    "phoneHome": "555-1235",
+    "role": "tutor",
+    "subjects": ["Math", "Calculus", "SAT Prep"],
+    "status": "Active"
+  },
+  {
+    "id": "87654",
+    "firstName": "Michael",
+    "lastName": "Chen",
+    "email": "michael.chen@tutoringcenter.org",
+    "phoneMobile": "555-2345",
+    "phoneHome": "555-2346",
+    "role": "tutor",
+    "subjects": ["Reading", "English", "Writing"],
+    "status": "Active"
+  },
+  {
+    "id": "76543",
+    "firstName": "Emily",
+    "lastName": "Rodriguez",
+    "email": "emily.rodriguez@tutoringcenter.org",
+    "phoneMobile": "555-3456",
+    "phoneHome": "555-3457",
+    "role": "tutor",
+    "subjects": ["Chemistry", "Physics", "Biology"],
+    "status": "Active"
+  },
+  {
+    "id": "65432",
+    "firstName": "David",
+    "lastName": "Park",
+    "email": "david.park@tutoringcenter.org",
+    "phoneMobile": "555-4567",
+    "phoneHome": "555-4568",
+    "role": "tutor",
+    "subjects": ["Spanish", "French", "ESL"],
+    "status": "Active"
+  }
+]
