@@ -1,0 +1,2566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Tutor Dashboard</title>
+  <style>
+    /**
+     * Student Tutor Dashboard - Frontend Styles
+     * Version: 3.6 (Phase 2 - Patches 1-6 Integrated)
+     * Date: 2025-11-01
+     * Changes: Grade/school header, comments across tabs, past courses field, link styling
+     * Previous: v3.5 (History tab with session modal)
+     */
+    
+    :root {
+      --reddit-orange: #FF4500;
+      --reddit-blue: #0079D3;
+      --card-bg: #ffffff;
+      --hover-bg: #f6f7f8;
+      --border: #ccc;
+      --text-primary: #1c1c1c;
+      --text-secondary: #7c7c7c;
+      --shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: #DAE0E6;
+      color: var(--text-primary);
+    }
+    
+    /* ==================== FUNNY LOADING OVERLAY ==================== */
+    .funny-loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+    
+    .funny-loading-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    
+    .funny-loading-popover {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      min-width: 320px;
+      max-width: 400px;
+      transform: translateY(20px);
+      transition: transform 0.3s ease;
+    }
+    
+    .funny-loading-overlay.active .funny-loading-popover {
+      transform: translateY(0);
+    }
+    
+    .penguin-loader {
+      width: 160px;
+      height: 120px;
+      margin: 0 auto 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .penguin-loader img {
+      width: 160px;
+      height: 120px;
+      object-fit: contain;
+    }
+    
+    .funny-loading-progress {
+      width: 100%;
+      height: 8px;
+      background: var(--hover-bg);
+      border-radius: 4px;
+      overflow: hidden;
+      margin: 1rem 0;
+    }
+    
+    .funny-loading-progress-bar {
+      height: 100%;
+      background: var(--reddit-orange);
+      border-radius: 4px;
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+    
+    .funny-loading-title {
+      color: var(--text-primary) !important;
+      font-size: 16px;
+      margin-bottom: 1rem;
+      font-weight: 600;
+      min-height: 24px;
+      line-height: 1.4;
+      padding: 0 10px;
+    }
+    
+    .funny-loading-subtitle {
+      color: var(--text-secondary) !important;
+      font-size: 12px;
+      min-height: 16px;
+      line-height: 1.4;
+    }
+    
+    /* ==================== TOOLTIP ==================== */
+    .tutor-tooltip {
+      position: fixed;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-size: 12px;
+      color: var(--text-secondary);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      z-index: 9999;
+      pointer-events: none;
+      white-space: nowrap;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+    
+    .tutor-tooltip.visible {
+      opacity: 1;
+    }
+    
+    /* ==================== TUTOR DIALOG MODAL ==================== */
+    .tutor-dialog-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10001;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+    
+    .tutor-dialog-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    
+    .tutor-dialog {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+      min-width: 340px;
+      max-width: 450px;
+      width: 90%;
+      transform: translateY(20px);
+      transition: transform 0.3s ease;
+      position: relative;
+    }
+    
+    .tutor-dialog-overlay.active .tutor-dialog {
+      transform: translateY(0);
+    }
+    
+    .tutor-dialog-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: none;
+      border: none;
+      font-size: 24px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transition: background 0.2s;
+    }
+    
+    .tutor-dialog-close:hover {
+      background: var(--hover-bg);
+      color: var(--text-primary);
+    }
+    
+    .tutor-dialog-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 1.5rem;
+      padding-right: 2rem;
+    }
+    
+    .tutor-dialog-info {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    
+    .tutor-dialog-row {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+    
+    .tutor-dialog-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .tutor-dialog-value {
+      font-size: 15px;
+      color: var(--text-primary);
+    }
+    
+    .tutor-dialog-value a {
+      color: var(--reddit-blue);
+      text-decoration: none;
+    }
+    
+    .tutor-dialog-value a:hover {
+      text-decoration: underline;
+    }
+    
+    .tutor-dialog-lastSeen {
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+    
+    /* ==================== SESSION MODAL ==================== */
+    .session-modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10002;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+    
+    .session-modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    
+    .session-modal {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+      max-width: 600px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+      transform: translateY(20px);
+      transition: transform 0.3s ease;
+      position: relative;
+    }
+    
+    .session-modal-overlay.active .session-modal {
+      transform: translateY(0);
+    }
+    
+    .session-modal-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: none;
+      border: none;
+      font-size: 24px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transition: background 0.2s;
+    }
+    
+    .session-modal-close:hover {
+      background: var(--hover-bg);
+      color: var(--text-primary);
+    }
+    
+    .session-modal-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 1.5rem;
+      padding-right: 2rem;
+      line-height: 1.4;
+    }
+    
+    .session-modal-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 2px solid var(--border);
+    }
+    
+    .session-modal-meta-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 140px;
+    }
+    
+    .session-modal-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .session-modal-value {
+      font-size: 14px;
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+    
+    .session-modal-notes {
+      background: var(--hover-bg);
+      border-radius: 8px;
+      padding: 16px;
+      margin-top: 1rem;
+    }
+    
+    .session-modal-notes-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+    }
+    
+    .session-modal-notes-body {
+      font-size: 14px;
+      color: var(--text-primary);
+      line-height: 1.6;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+    
+    /* ==================== LOGIN ==================== */
+    .login-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+    
+    .login-card {
+      background: white;
+      border-radius: 12px;
+      padding: 2.5rem;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+      text-align: center;
+      max-width: 400px;
+      width: 90%;
+    }
+    
+    .login-card h2 {
+      margin-bottom: 0.5rem;
+      color: var(--text-primary);
+    }
+    
+    .login-card p {
+      color: var(--text-secondary);
+      margin-bottom: 1.5rem;
+      font-size: 14px;
+    }
+    
+    .login-input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      font-size: 16px;
+      margin-bottom: 1rem;
+    }
+    
+    .login-input:focus {
+      outline: none;
+      border-color: var(--reddit-blue);
+    }
+    
+    .login-btn {
+      width: 100%;
+      padding: 12px;
+      background: var(--reddit-orange);
+      color: white;
+      border: none;
+      border-radius: 24px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    
+    .login-btn:hover {
+      background: #ff5722;
+    }
+    
+    .login-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    .error-msg {
+      margin-top: 1rem;
+      padding: 12px;
+      background: #fee;
+      border: 1px solid #fcc;
+      border-radius: 8px;
+      color: #c33;
+      font-size: 14px;
+    }
+    
+    /* ==================== HEADER ==================== */
+    .header {
+      background: white;
+      border-bottom: 1px solid var(--border);
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      box-shadow: var(--shadow);
+    }
+    
+    .logo {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--reddit-orange);
+      cursor: pointer;
+      user-select: none;
+    }
+    
+    .search-container {
+      flex: 1;
+      max-width: 600px;
+    }
+    
+    .search-input {
+      width: 100%;
+      padding: 8px 16px;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      font-size: 14px;
+      background: var(--hover-bg);
+    }
+    
+    .search-input:focus {
+      outline: none;
+      background: white;
+      border-color: var(--reddit-blue);
+    }
+    
+    .user-menu {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+    
+    .logout-btn {
+      padding: 6px 16px;
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .logout-btn:hover {
+      background: var(--hover-bg);
+    }
+    
+    /* ==================== MAIN LAYOUT ==================== */
+    .container {
+      max-width: 1200px;
+      margin: 24px auto;
+      padding: 0 24px;
+    }
+    
+    .hidden {
+      display: none !important;
+    }
+    
+    /* ==================== STUDENT LIST ==================== */
+    .student-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    
+    .student-card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 16px 20px;
+      box-shadow: var(--shadow);
+      cursor: pointer;
+      transition: all 0.2s;
+      border: 2px solid transparent;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    
+    .student-card:hover {
+      border-color: var(--reddit-orange);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+    
+    .student-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--reddit-orange);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+    
+    .student-card-content {
+      flex: 1;
+      min-width: 0;
+    }
+    
+    .student-name {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+    
+    .student-meta {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: var(--text-secondary);
+      font-size: 14px;
+    }
+    
+    /* ==================== PROFILE VIEW ==================== */
+    .profile-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    
+    .back-btn {
+      padding: 8px 16px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .back-btn:hover {
+      background: var(--hover-bg);
+    }
+    
+    .profile-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.2;
+    }
+    
+    .profile-meta {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+    
+    /* ==================== PERSISTENT COMMENTS SECTION ==================== */
+    .persistent-comments-section {
+      margin-top: 24px;
+      padding-top: 24px;
+      border-top: 2px solid var(--border);
+    }
+    
+    /* ==================== TABS ==================== */
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+      border-bottom: 2px solid var(--border);
+      overflow-x: auto;
+    }
+    
+    .tab-btn {
+      padding: 12px 20px;
+      background: none;
+      border: none;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    
+    .tab-btn:hover {
+      color: var(--text-primary);
+    }
+    
+    .tab-btn.active {
+      color: var(--reddit-orange);
+      border-bottom-color: var(--reddit-orange);
+    }
+    
+    .tab-content {
+      display: none;
+    }
+    
+    .tab-content.active {
+      display: block;
+    }
+    
+    /* ==================== CARDS ==================== */
+    .card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: var(--shadow);
+      margin-bottom: 16px;
+    }
+    
+    .card-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .card-section {
+      margin-bottom: 16px;
+    }
+    
+    .card-section:last-child {
+      margin-bottom: 0;
+    }
+    
+    .card-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .card-value {
+      font-size: 15px;
+      color: var(--text-primary);
+      line-height: 1.5;
+    }
+    
+    /* ==================== LINK BUTTON STYLING ==================== */
+    .link-btn {
+      display: inline-block;
+      padding: 4px 12px;
+      margin: 2px 4px 2px 0;
+      background: linear-gradient(135deg, #FF4500 0%, #FF6B35 100%);
+      color: white !important;
+      text-decoration: none !important;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 4px rgba(255, 69, 0, 0.2);
+      word-break: break-all;
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    
+    .link-btn:hover {
+      background: linear-gradient(135deg, #E03E00 0%, #E05525 100%);
+      box-shadow: 0 3px 8px rgba(255, 69, 0, 0.35);
+      transform: translateY(-1px);
+    }
+    
+    .link-btn:active {
+      transform: translateY(0);
+      box-shadow: 0 1px 2px rgba(255, 69, 0, 0.3);
+    }
+    
+    .link-btn::after {
+      content: ' ↗';
+      font-size: 11px;
+      opacity: 0.8;
+      margin-left: 2px;
+    }
+    
+    .edit-btn {
+      padding: 6px 14px;
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: var(--text-secondary);
+    }
+    
+    .edit-btn:hover {
+      background: var(--hover-bg);
+      color: var(--text-primary);
+    }
+    
+    /* ==================== PAST COURSES COMPACT INPUT ==================== */
+    .past-courses-input {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 14px;
+      transition: border-color 0.2s;
+    }
+    
+    .past-courses-input:focus {
+      outline: none;
+      border-color: var(--reddit-blue);
+    }
+    
+    .past-courses-input:disabled {
+      background: var(--hover-bg);
+      color: var(--text-secondary);
+      cursor: not-allowed;
+    }
+    
+    /* ==================== COMPACT TEAM SECTION ==================== */
+    .tutors-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: flex-start;
+    }
+    
+    .tutor-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      background: var(--hover-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s;
+      max-width: 100%;
+    }
+    
+    .tutor-chip:hover {
+      background: var(--card-bg);
+      border-color: var(--reddit-blue);
+      box-shadow: 0 2px 6px rgba(0, 123, 255, 0.15);
+    }
+    
+    .tutor-name {
+      color: var(--text-primary);
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
+    .tutor-subject {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      background: #e3f2fd;
+      color: #1976d2;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    
+    .tutor-role {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      background: #f5f5f5;
+      color: #616161;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    
+    .tutor-role.group {
+      background: #fff3e0;
+      color: #f57c00;
+    }
+    
+    /* ==================== HISTORY TAB ==================== */
+    .history-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    
+    .history-item {
+      background: var(--hover-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 16px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .history-item:hover {
+      background: var(--card-bg);
+      border-color: var(--reddit-blue);
+      transform: translateX(4px);
+      box-shadow: 0 2px 6px rgba(0, 123, 255, 0.15);
+    }
+    
+    .history-item-left {
+      flex: 1;
+      min-width: 0;
+    }
+    
+    .history-item-date {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+    
+    .history-item-tutor {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+    
+    .history-item-status {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 4px 10px;
+      border-radius: 12px;
+      white-space: nowrap;
+    }
+    
+    .history-item-status.attended {
+      background: #e8f5e9;
+      color: #2e7d32;
+    }
+    
+    .history-item-status.missed {
+      background: #ffebee;
+      color: #c62828;
+    }
+    
+    .history-item-status.cancelled {
+      background: #f5f5f5;
+      color: #616161;
+    }
+    
+    .history-show-more {
+      width: 100%;
+      padding: 12px;
+      background: transparent;
+      border: 2px dashed var(--border);
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .history-show-more:hover {
+      background: var(--hover-bg);
+      border-color: var(--reddit-blue);
+      color: var(--reddit-blue);
+    }
+    
+    .history-show-more:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    /* ==================== COMMENTS ==================== */
+    .comment-item {
+      padding: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .comment-item:last-child {
+      border-bottom: none;
+    }
+    
+    .comment-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    
+    .comment-author {
+      font-weight: 600;
+      color: var(--reddit-blue);
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    
+    .comment-author:hover {
+      color: var(--reddit-orange);
+      text-decoration: underline;
+    }
+    
+    .comment-time {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+    
+    .comment-body {
+      color: var(--text-primary);
+      line-height: 1.6;
+      word-wrap: break-word;
+    }
+    
+    .comment-form {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 2px solid var(--border);
+    }
+    
+    .comment-textarea {
+      width: 100%;
+      min-height: 100px;
+      padding: 12px;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 14px;
+      resize: vertical;
+      margin-bottom: 12px;
+    }
+    
+    .comment-textarea:focus {
+      outline: none;
+      border-color: var(--reddit-blue);
+    }
+    
+    .comment-submit {
+      padding: 10px 24px;
+      background: var(--reddit-orange);
+      color: white;
+      border: none;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    
+    .comment-submit:hover {
+      background: #ff5722;
+    }
+    
+    .comment-submit:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    /* ==================== MODALS ==================== */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+    
+    .modal {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+      max-width: 600px;
+      width: 90%;
+    }
+    
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+    
+    .modal-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+    
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 24px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transition: background 0.2s;
+    }
+    
+    .modal-close:hover {
+      background: var(--hover-bg);
+      color: var(--text-primary);
+    }
+    
+    .modal-textarea {
+      width: 100%;
+      min-height: 200px;
+      padding: 12px;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 14px;
+      resize: vertical;
+      margin-bottom: 1rem;
+    }
+    
+    .modal-textarea:focus {
+      outline: none;
+      border-color: var(--reddit-blue);
+    }
+    
+    .modal-footer {
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+    }
+    
+    .modal-btn {
+      padding: 10px 24px;
+      border: none;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .modal-btn-primary {
+      background: var(--reddit-orange);
+      color: white;
+    }
+    
+    .modal-btn-primary:hover {
+      background: #ff5722;
+    }
+    
+    .modal-btn-primary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    .modal-btn-secondary {
+      background: transparent;
+      color: var(--text-secondary);
+      border: 1px solid var(--border);
+    }
+    
+    .modal-btn-secondary:hover {
+      background: var(--hover-bg);
+      color: var(--text-primary);
+    }
+    
+    /* ==================== RESPONSIVE ==================== */
+    @media (max-width: 768px) {
+      .header {
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+      
+      .search-container {
+        order: 3;
+        width: 100%;
+        max-width: none;
+      }
+      
+      .profile-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .tabs {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+      
+      .history-item {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .history-item-status {
+        align-self: flex-end;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- LOGIN OVERLAY -->
+  <div id="loginOverlay" class="login-overlay">
+    <div class="login-card">
+      <h2>Student Tutor Dashboard</h2>
+      <p>Enter your Employee ID to continue</p>
+      <input type="text" id="empIdInput" class="login-input" placeholder="Employee ID" autocomplete="off">
+      <button id="loginBtn" class="login-btn">Sign In</button>
+      <div id="loginError" class="error-msg hidden"></div>
+    </div>
+  </div>
+
+  <!-- FUNNY LOADING OVERLAY -->
+  <div id="funnyLoadingOverlay" class="funny-loading-overlay">
+    <div class="funny-loading-popover">
+      <div class="penguin-loader">
+        <img src="https://i.redd.it/zx1g0310iigd1.gif" alt="Loading penguin">
+      </div>
+      <div class="funny-loading-title" id="funnyLoadingTitle">Loading...</div>
+      <div class="funny-loading-progress" id="funnyLoadingProgress">
+        <div class="funny-loading-progress-bar"></div>
+      </div>
+      <div class="funny-loading-subtitle" id="funnyLoadingSubtitle">Please wait...</div>
+    </div>
+  </div>
+
+  <!-- TOOLTIP -->
+  <div id="tutorTooltip" class="tutor-tooltip"></div>
+
+  <!-- TUTOR DIALOG MODAL -->
+  <div id="tutorDialogOverlay" class="tutor-dialog-overlay">
+    <div class="tutor-dialog">
+      <button class="tutor-dialog-close" id="tutorDialogClose">&times;</button>
+      <h2 class="tutor-dialog-title" id="tutorDialogName">Tutor Name</h2>
+      <div class="tutor-dialog-info">
+        <div class="tutor-dialog-row">
+          <div class="tutor-dialog-label">Email</div>
+          <div class="tutor-dialog-value" id="tutorDialogEmail">-</div>
+        </div>
+        <div class="tutor-dialog-row">
+          <div class="tutor-dialog-label">Mobile Phone</div>
+          <div class="tutor-dialog-value" id="tutorDialogPhone">-</div>
+        </div>
+        <div class="tutor-dialog-lastSeen" id="tutorDialogLastSeen"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SESSION MODAL -->
+  <div id="sessionModalOverlay" class="session-modal-overlay">
+    <div class="session-modal">
+      <button class="session-modal-close" id="sessionModalClose">&times;</button>
+      <h2 class="session-modal-title" id="sessionModalTitle">Session Details</h2>
+      
+      <div class="session-modal-meta">
+        <div class="session-modal-meta-item">
+          <div class="session-modal-label">Date & Time</div>
+          <div class="session-modal-value" id="sessionModalDateTime">-</div>
+        </div>
+        <div class="session-modal-meta-item">
+          <div class="session-modal-label">Subject</div>
+          <div class="session-modal-value" id="sessionModalSubject">-</div>
+        </div>
+        <div class="session-modal-meta-item">
+          <div class="session-modal-label">Tutor</div>
+          <div class="session-modal-value" id="sessionModalTutor">-</div>
+        </div>
+        <div class="session-modal-meta-item">
+          <div class="session-modal-label">Status</div>
+          <div class="session-modal-value" id="sessionModalStatus">-</div>
+        </div>
+      </div>
+      
+      <div class="session-modal-notes">
+        <div class="session-modal-notes-title">Session Notes</div>
+        <div class="session-modal-notes-body" id="sessionModalNotes">No notes available</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN APP -->
+  <div id="app" class="hidden">
+    <!-- HEADER -->
+    <div class="header">
+      <div class="logo" id="homeBtn">STD</div>
+      <div class="search-container">
+        <input type="text" id="searchInput" class="search-input" placeholder="Search students...">
+      </div>
+      <div class="user-menu">
+        <span id="userName">User</span>
+        <button id="logoutBtn" class="logout-btn">Logout</button>
+      </div>
+    </div>
+
+    <!-- STUDENT LIST VIEW -->
+    <div id="listView" class="container">
+      <div id="studentList" class="student-list"></div>
+    </div>
+
+    <!-- PROFILE VIEW -->
+    <div id="profileView" class="container hidden">
+      <div class="profile-header">
+        <button id="backBtn" class="back-btn">← Back</button>
+        <div>
+          <div class="profile-title" id="profileTitle">Student Profile</div>
+          <div class="profile-meta" id="profileMeta"></div>
+        </div>
+      </div>
+
+      <!-- TABS -->
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="overview">Overview</button>
+        <button class="tab-btn" data-tab="team">Team</button>
+        <button class="tab-btn" data-tab="contact">Contact</button>
+        <button class="tab-btn" data-tab="history">History</button>
+      </div>
+
+      <!-- OVERVIEW TAB -->
+      <div id="overviewTab" class="tab-content active">
+        <!-- PAST COURSES CARD -->
+        <div class="card">
+          <div class="card-title">
+            Past Courses
+            <button id="editPastCoursesBtn" class="edit-btn">Edit</button>
+          </div>
+          <input 
+            type="text" 
+            id="pastCoursesDisplay" 
+            class="past-courses-input" 
+            placeholder="List previous courses (e.g., Algebra I, Biology, Spanish II)"
+            disabled
+          >
+        </div>
+
+        <!-- STUDENT INFORMATION CARD -->
+        <div class="card">
+          <div class="card-title">
+            Student Information
+          </div>
+          <div id="bioSection" class="card-section" style="display:none;">
+            <div class="card-label">Bio</div>
+            <div class="card-value" id="studentBio">-</div>
+          </div>
+          <div class="card-section">
+            <div class="card-label">Additional Notes</div>
+            <div class="card-value" id="studentNotes">-</div>
+          </div>
+          <button id="editNotesBtn" class="edit-btn">Edit Notes</button>
+        </div>
+      </div>
+
+      <!-- TEAM TAB -->
+      <div id="teamTab" class="tab-content">
+        <div class="card">
+          <div class="card-title">Tutors</div>
+          <div id="tutorsList" class="tutors-grid"></div>
+        </div>
+      </div>
+
+      <!-- CONTACT TAB -->
+      <div id="contactTab" class="tab-content">
+        <div class="card">
+          <div class="card-title">Contact Information</div>
+          <div class="card-section">
+            <div class="card-label">Email</div>
+            <div class="card-value" id="contactEmail">-</div>
+          </div>
+          <div class="card-section">
+            <div class="card-label">Phone</div>
+            <div class="card-value" id="contactPhone">-</div>
+          </div>
+          <div class="card-section">
+            <div class="card-label">Emergency Contact</div>
+            <div class="card-value" id="contactEmergency">-</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- HISTORY TAB -->
+      <div id="historyTab" class="tab-content">
+        <div class="card">
+          <div class="card-title">Session History</div>
+          <div id="historyList" class="history-list"></div>
+        </div>
+      </div>
+
+      <!-- PERSISTENT COMMENTS SECTION (visible across all tabs) -->
+      <div class="persistent-comments-section">
+        <button id="loadCommentsBtn" class="history-show-more" style="width:100%; margin-bottom:16px;">Load Comments</button>
+        
+        <div class="card" id="commentsCard" style="display:none;">
+          <div class="card-title">Comments</div>
+          <div id="commentsSection"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EDIT NOTES MODAL -->
+  <div id="editNotesModal" class="modal-overlay hidden">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="modal-title">Edit Additional Notes</h3>
+        <button class="modal-close" id="notesModalClose">&times;</button>
+      </div>
+      <textarea id="notesTextarea" class="modal-textarea" placeholder="Student likes/dislikes, goals, test dates, deadlines, etc."></textarea>
+      <div class="modal-footer">
+        <button class="modal-btn modal-btn-secondary" id="notesCancel">Cancel</button>
+        <button class="modal-btn modal-btn-primary" id="notesSave">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- EDIT PAST COURSES MODAL -->
+  <div id="editPastCoursesModal" class="modal-overlay hidden">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="modal-title">Edit Past Courses</h3>
+        <button class="modal-close" id="pastCoursesModalClose">&times;</button>
+      </div>
+      <input 
+        type="text" 
+        id="pastCoursesTextarea" 
+        class="past-courses-input" 
+        placeholder="List previous courses (e.g., Algebra I, Biology, Spanish II)"
+        style="margin-bottom: 1rem;"
+      >
+      <div class="modal-footer">
+        <button class="modal-btn modal-btn-secondary" id="pastCoursesCancel">Cancel</button>
+        <button class="modal-btn modal-btn-primary" id="pastCoursesSave">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /**
+     * Student Tutor Dashboard - Frontend Script
+     * Version: 3.6 (Phase 1C - Patches 1-6 Complete)
+     * Date: 2025-11-01
+     * Changes: Grade header, comments persistence, past courses field, link styling
+     * Backend Requirements: appendPastCourses endpoint needed
+     */
+    
+    // UPDATE THIS WITH YOUR BACKEND URL
+    const API_URL = 'BACKEND_URL_HERE';
+    
+    const $ = (id) => document.getElementById(id);
+    
+    let sessionKey = null;
+    let currentUser = null;
+    let allStudents = [];
+    let tutorDirectory = {};
+    let currentStudentId = null;
+    let currentStudentData = null;
+    let historyOffset = 0;
+    let historyHasMore = false;
+    let allHistorySessions = [];
+    
+    // ==================== FUNNY LOADING MODULE ====================
+    const FunnyLoading = {
+      totalItems: 0,
+      cachedItems: 0,
+      isActive: false,
+      currentTutor: null,
+      endingTriggered: false,
+      
+      penguinGifs: [
+        "https://i.redd.it/kv27yuqo7wgd1.gif",
+        "https://i.redd.it/zivj0410iigd1.gif",
+        "https://i.redd.it/zx1g0310iigd1.gif",
+        "https://i.redd.it/ivcx6810iigd1.gif",
+        "https://i.redd.it/6bhr4210iigd1.gif"
+      ],
+      
+      funnyMessages: [
+        "is behind you!",
+        "just microwaved foil...",
+        "is in the banana tree...",
+        "just high-fived the stapler...",
+        "is racing snails...",
+        "spilled the pencil sharpener again...",
+        "is in the turtle tank...",
+        "just trained ant circuses...",
+        "is dueling the clock...",
+        "just found Narnia in the closet...",
+        "is conducting pencil symphonies...",
+        "just taught a desk to breakdance...",
+        "is herding butterflies...",
+        "just rediscovered gravity...",
+        "is reading to plants...",
+        "is leading a crayon rebellion...",
+        "is leading rubber band revolutions...",
+        "just declared early snack time...",
+        "lost marker privileges...",
+        "is eating the crayons...",
+        "just became playground ruler...",
+        "is teaching clouds to spell...",
+        "is negotiating with the photocopier...",
+        "just started a slow-motion revolution...",
+        "is wrestling an octopus...",
+        "set off the fire alarm...",
+        "set off the fire alarm AGAIN...",
+        "just befriended a seagull...",
+        "lost Schrodinger's cat...",
+        "hasn't eaten breakfast...",
+        "ate all the snacks again...",
+        "is burning eggs...",
+        "is singing in the shower...",
+        "is gardening with gophers...",
+        "has entered the gulag...",
+        "doesn't need anymore sugar...",
+        "could use a nap...",
+        "is playing patty cake...",
+        "is juggling jelly...",
+        "is painting rain...",
+        "just found a new continent under the table...",
+        "is eating bread at circuses...",
+        "just crop dusted Mike...",
+        "is stressing out Mike...",
+        "loves bothering Jule...",
+        "is gonna be an astronaut!",
+        "is my superhero!",
+        "needs God...",
+        "needs a vacation...",
+        "needs ANOTHER vacation...",
+        "won't leave the kitchen..."
+      ],
+      
+      showImmediate() {
+        this.isActive = true;
+        this.cachedItems = 0;
+        this.endingTriggered = false;
+        
+        const overlay = $('funnyLoadingOverlay');
+        const title = $('funnyLoadingTitle');
+        const subtitle = $('funnyLoadingSubtitle');
+        const progress = overlay.querySelector('.funny-loading-progress-bar');
+        const penguinImg = overlay.querySelector('.penguin-loader img');
+        
+        const randomGif = this.penguinGifs[Math.floor(Math.random() * this.penguinGifs.length)];
+        penguinImg.src = randomGif;
+        
+        title.textContent = 'Authenticating...';
+        subtitle.textContent = 'Verifying your credentials...';
+        progress.style.width = '0%';
+        
+        overlay.classList.add('active');
+      },
+      
+      show(totalItems = 0, tutorName = null) {
+        if (this.isActive) {
+          const overlay = $('funnyLoadingOverlay');
+          const penguinImg = overlay.querySelector('.penguin-loader img');
+          const currentSrc = penguinImg.src;
+          
+          let newGif;
+          do {
+            newGif = this.penguinGifs[Math.floor(Math.random() * this.penguinGifs.length)];
+          } while (newGif === currentSrc && this.penguinGifs.length > 1);
+          
+          penguinImg.src = newGif;
+        } else {
+          this.isActive = true;
+          const overlay = $('funnyLoadingOverlay');
+          const penguinImg = overlay.querySelector('.penguin-loader img');
+          const randomGif = this.penguinGifs[Math.floor(Math.random() * this.penguinGifs.length)];
+          penguinImg.src = randomGif;
+          setTimeout(() => overlay.classList.add('active'), 10);
+        }
+        
+        this.totalItems = totalItems;
+        this.cachedItems = 0;
+        this.endingTriggered = false;
+        this.currentTutor = tutorName || this._getCurrentTutorName();
+        
+        const title = $('funnyLoadingTitle');
+        const subtitle = $('funnyLoadingSubtitle');
+        const progress = $('funnyLoadingProgress').querySelector('.funny-loading-progress-bar');
+        
+        title.textContent = "Initializing cache...";
+        subtitle.textContent = totalItems ? `Preparing to cache ${totalItems} items...` : "Starting caching process...";
+        progress.style.width = '0%';
+      },
+      
+      updateCacheProgress(label) {
+        if (!this.isActive) return;
+        
+        this.cachedItems++;
+        
+        const title = $('funnyLoadingTitle');
+        const subtitle = $('funnyLoadingSubtitle');
+        const progress = $('funnyLoadingProgress').querySelector('.funny-loading-progress-bar');
+        
+        const randomMsg = this.funnyMessages[Math.floor(Math.random() * this.funnyMessages.length)];
+        title.textContent = `${label} ${randomMsg}`;
+        
+        if (this.totalItems > 0) {
+          const percent = Math.min(100, (this.cachedItems / this.totalItems) * 100);
+          progress.style.width = percent + '%';
+          subtitle.textContent = `Cached ${this.cachedItems}/${this.totalItems} items...`;
+          
+          if (percent >= 95 && !this.endingTriggered) {
+            this.endingTriggered = true;
+          }
+        } else {
+          subtitle.textContent = `Cached ${this.cachedItems} items...`;
+        }
+      },
+      
+      setTotalItems(count) {
+        this.totalItems = count;
+      },
+      
+      hide() {
+        if (!this.isActive) return;
+        
+        $('funnyLoadingProgress').querySelector('.funny-loading-progress-bar').style.width = '100%';
+        this._playEndingSequence();
+      },
+      
+      _playEndingSequence() {
+        const title = $('funnyLoadingTitle');
+        const subtitle = $('funnyLoadingSubtitle');
+        const tutorName = this.currentTutor || this._getCurrentTutorName() || "Your tutor";
+        
+        title.textContent = `${tutorName} is changing the world...`;
+        subtitle.textContent = "Making a difference every day";
+        
+        setTimeout(() => {
+          title.textContent = "One student at a time...";
+          subtitle.textContent = "Ready to make an impact";
+          
+          setTimeout(() => this._completeHide(), 1000);
+        }, 2000);
+      },
+      
+      _completeHide() {
+        $('funnyLoadingOverlay').classList.remove('active');
+        this.isActive = false;
+        this.endingTriggered = false;
+      },
+      
+      _getCurrentTutorName() {
+        if (window.currentUser && currentUser.first_name) {
+          return currentUser.first_name;
+        }
+        const userNameEl = $('userName');
+        if (userNameEl) {
+          const text = userNameEl.textContent;
+          const firstName = text.split(' ')[0];
+          if (firstName && firstName !== 'Employee' && firstName !== 'Loading...') {
+            return firstName;
+          }
+        }
+        return "Your tutor";
+      }
+    };
+    
+    // ==================== TOOLTIP MANAGER ====================
+    const TooltipManager = {
+      show(text, element) {
+        const tooltip = $('tutorTooltip');
+        tooltip.textContent = text;
+        tooltip.classList.add('visible');
+        
+        const rect = element.getBoundingClientRect();
+        const tooltipRect = tooltip.getBoundingClientRect();
+        
+        let left = rect.left + (rect.width / 2) - (tooltipRect.width / 2);
+        let top = rect.bottom + 8;
+        
+        if (left < 8) left = 8;
+        if (left + tooltipRect.width > window.innerWidth - 8) {
+          left = window.innerWidth - tooltipRect.width - 8;
+        }
+        
+        tooltip.style.left = left + 'px';
+        tooltip.style.top = top + 'px';
+      },
+      
+      hide() {
+        $('tutorTooltip').classList.remove('visible');
+      }
+    };
+    
+    // ==================== TUTOR DIALOG ====================
+    const TutorDialog = {
+      open(tutorId) {
+        const tutor = tutorDirectory[tutorId];
+        if (!tutor) {
+          console.warn('Tutor not found:', tutorId);
+          return;
+        }
+        
+        const name = `${tutor.first_name || ''} ${tutor.last_name || ''}`.trim() || tutorId;
+        const email = tutor.email || 'Not provided';
+        const phone = tutor.phone_mobile || tutor.phone || 'Not provided';
+        
+        $('tutorDialogName').textContent = name;
+        
+        if (email !== 'Not provided') {
+          $('tutorDialogEmail').innerHTML = `<a href="mailto:${escapeHtml(email)}">${escapeHtml(email)}</a>`;
+        } else {
+          $('tutorDialogEmail').textContent = email;
+        }
+        
+        $('tutorDialogPhone').textContent = phone;
+        
+        let lastSeenText = '';
+        if (currentStudentId && window.cachedLinkMap && window.cachedLinkMap[currentStudentId]) {
+          const links = window.cachedLinkMap[currentStudentId].filter(l => l.tutor_id === tutorId);
+          if (links.length > 0) {
+            const dates = links.map(l => l.last_seen).filter(d => d !== 'Unknown');
+            if (dates.length > 0) {
+              const mostRecent = dates.sort().reverse()[0];
+              lastSeenText = `Last seen with this student: ${mostRecent}`;
+            }
+          }
+        }
+        
+        if (lastSeenText) {
+          $('tutorDialogLastSeen').textContent = lastSeenText;
+          $('tutorDialogLastSeen').style.display = 'block';
+        } else {
+          $('tutorDialogLastSeen').style.display = 'none';
+        }
+        
+        $('tutorDialogOverlay').classList.add('active');
+      },
+      
+      close() {
+        $('tutorDialogOverlay').classList.remove('active');
+      }
+    };
+    
+    $('tutorDialogOverlay').addEventListener('click', (e) => {
+      if (e.target === $('tutorDialogOverlay')) {
+        TutorDialog.close();
+      }
+    });
+    
+    $('tutorDialogClose').addEventListener('click', () => {
+      TutorDialog.close();
+    });
+    
+    // ==================== SESSION MODAL ====================
+    const SessionModal = {
+      open(session) {
+        const title = session.title || 'Session Details';
+        const datetime = formatSessionDateTime(session.datetime_iso);
+        const subject = session.service || 'Not specified';
+        const status = session.status || 'Unknown';
+        const notes = session.notes || 'No notes available';
+        
+        const tutor = tutorDirectory[session.employee_id] || {};
+        const tutorName = `${tutor.first_name || ''} ${tutor.last_name || ''}`.trim() || session.employee_id;
+        
+        $('sessionModalTitle').textContent = title;
+        $('sessionModalDateTime').textContent = datetime;
+        $('sessionModalSubject').textContent = subject;
+        $('sessionModalTutor').textContent = tutorName;
+        $('sessionModalStatus').innerHTML = formatStatusBadge(status);
+        $('sessionModalNotes').textContent = notes;
+        
+        $('sessionModalOverlay').classList.add('active');
+      },
+      
+      close() {
+        $('sessionModalOverlay').classList.remove('active');
+      }
+    };
+    
+    $('sessionModalOverlay').addEventListener('click', (e) => {
+      if (e.target === $('sessionModalOverlay')) {
+        SessionModal.close();
+      }
+    });
+    
+    $('sessionModalClose').addEventListener('click', () => {
+      SessionModal.close();
+    });
+    
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        if ($('tutorDialogOverlay').classList.contains('active')) {
+          TutorDialog.close();
+        }
+        if ($('sessionModalOverlay').classList.contains('active')) {
+          SessionModal.close();
+        }
+        if (!$('editNotesModal').classList.contains('hidden')) {
+          closeNotesModal();
+        }
+        if (!$('editPastCoursesModal').classList.contains('hidden')) {
+          closePastCoursesModal();
+        }
+      }
+    });
+    
+    // ==================== API ====================
+    async function apiCall(action, params = {}) {
+      const url = new URL(API_URL);
+      url.searchParams.append('action', action);
+      if (sessionKey) url.searchParams.append('sessionKey', sessionKey);
+      
+      Object.entries(params).forEach(([k, v]) => {
+        url.searchParams.append(k, v);
+      });
+      
+      const res = await fetch(url.toString());
+      return await res.json();
+    }
+    
+    // ==================== AUTH ====================
+    function showLogin() {
+      $('loginOverlay').classList.remove('hidden');
+      $('app').classList.add('hidden');
+      
+      const savedId = localStorage.getItem('lastEmployeeId');
+      if (savedId) {
+        $('empIdInput').value = savedId;
+      }
+      
+      setTimeout(() => $('empIdInput').focus(), 100);
+    }
+    
+    function hideLogin() {
+      $('loginOverlay').classList.add('hidden');
+      $('app').classList.remove('hidden');
+    }
+    
+    function showError(msg) {
+      const el = $('loginError');
+      el.textContent = msg;
+      el.classList.remove('hidden');
+    }
+    
+    function hideError() {
+      $('loginError').classList.add('hidden');
+    }
+    
+    async function login() {
+      const empId = $('empIdInput').value.trim();
+      if (!empId) {
+        showError('Please enter your Employee ID');
+        return;
+      }
+      
+      hideError();
+      $('loginBtn').disabled = true;
+      $('loginBtn').textContent = 'Signing in...';
+      
+      FunnyLoading.showImmediate();
+      
+      try {
+        const result = await apiCall('login', { employeeId: empId });
+        
+        if (result.ok) {
+          sessionKey = result.session;
+          currentUser = result.viewer;
+          
+          localStorage.setItem('lastEmployeeId', empId);
+          
+          hideLogin();
+          
+          await loadPreloadBundle();
+          
+          $('userName').textContent = `${currentUser.first_name} ${currentUser.last_name}`.trim() || currentUser.tutor_id;
+          
+          renderStudentList();
+        } else {
+          FunnyLoading.hide();
+          showError(result.error || 'Login failed');
+        }
+      } catch (e) {
+        console.error('Login error:', e);
+        FunnyLoading.hide();
+        showError('Network error. Please try again.');
+      } finally {
+        $('loginBtn').disabled = false;
+        $('loginBtn').textContent = 'Sign In';
+      }
+    }
+    
+    function logout() {
+      sessionKey = null;
+      currentUser = null;
+      allStudents = [];
+      tutorDirectory = {};
+      currentStudentId = null;
+      currentStudentData = null;
+      window.cachedLinkMap = null;
+      historyOffset = 0;
+      historyHasMore = false;
+      allHistorySessions = [];
+      
+      showLogin();
+    }
+    
+    // ==================== PRELOAD ====================
+    async function loadPreloadBundle() {
+      const tutorName = currentUser?.first_name || "Your tutor";
+      FunnyLoading.show(0, tutorName);
+      
+      try {
+        const result = await apiCall('preloadBundle');
+        
+        if (result.ok) {
+          allStudents = result.studentData || [];
+          
+          tutorDirectory = {};
+          (result.tutorDirectory || []).forEach(t => {
+            tutorDirectory[t.tutor_id] = t;
+          });
+          
+          window.cachedLinkMap = result.linkMap || {};
+          
+          const PRELOAD_LIMIT = 15;
+          const INITIAL_DELAY = 800;
+          const FAST_DELAY = 200;
+          const INITIAL_COUNT = 7;
+          
+          FunnyLoading.setTotalItems(Math.min(allStudents.length, PRELOAD_LIMIT));
+          
+          for (let i = 0; i < Math.min(allStudents.length, PRELOAD_LIMIT); i++) {
+            const delay = i < INITIAL_COUNT ? INITIAL_DELAY : FAST_DELAY;
+            await new Promise(resolve => setTimeout(resolve, delay));
+            FunnyLoading.updateCacheProgress(allStudents[i].first_name || 'Student');
+          }
+        } else {
+          alert('Failed to load data: ' + result.error);
+        }
+      } catch (e) {
+        console.error('Preload error:', e);
+        alert('Failed to load data');
+      } finally {
+        FunnyLoading.hide();
+      }
+    }
+    
+    // ==================== STUDENT LIST ====================
+    function renderStudentList(searchTerm = '') {
+      const container = $('studentList');
+      const term = searchTerm.toLowerCase();
+      
+      const filtered = allStudents.filter(s => {
+        if (!term) return true;
+        const name = `${s.first_name} ${s.last_name}`.toLowerCase();
+        const grade = String(s.grade || '').toLowerCase();
+        const id = String(s.student_id || '').toLowerCase();
+        return name.includes(term) || grade.includes(term) || id.includes(term);
+      });
+      
+      if (filtered.length === 0) {
+        container.innerHTML = '<div class="empty-state">No students found</div>';
+        return;
+      }
+      
+      container.innerHTML = filtered.map(s => {
+        const firstInitial = (s.first_name || '?')[0].toUpperCase();
+        const lastInitial = (s.last_name || '?')[0].toUpperCase();
+        return `
+          <div class="student-card" onclick="openStudentProfile('${s.student_id}')">
+            <div class="student-avatar">${firstInitial}${lastInitial}</div>
+            <div class="student-card-content">
+              <div class="student-name">${escapeHtml(s.first_name)} ${escapeHtml(s.last_name)}</div>
+              <div class="student-meta">Grade ${escapeHtml(s.grade || '?')} - ${escapeHtml(s.student_id)}</div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+    
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+    
+    // ==================== PROFILE VIEW ====================
+    async function openStudentProfile(studentId) {
+      currentStudentId = studentId;
+      
+      $('listView').classList.add('hidden');
+      $('profileView').classList.remove('hidden');
+      
+      const student = allStudents.find(s => s.student_id === studentId);
+      if (student) {
+        const name = `${student.first_name} ${student.last_name}`;
+        $('profileTitle').textContent = name;
+        
+        const metaParts = [];
+        if (student.grade) metaParts.push(`Grade: ${student.grade}`);
+        if (student.school) metaParts.push(`School: ${student.school}`);
+        
+        // Build meta with bold labels
+        const metaHTML = metaParts.map(part => {
+          if (part.startsWith('Grade:')) {
+            return '<strong>Grade:</strong>' + part.substring(6);
+          } else if (part.startsWith('School:')) {
+            return '<strong>School:</strong>' + part.substring(7);
+          }
+          return part;
+        }).join('  •  ');
+        
+        $('profileMeta').innerHTML = metaHTML;
+      }
+      
+      switchTab('overview');
+      
+      FunnyLoading.show();
+      
+      try {
+        const result = await apiCall('studentBundle', { studentId });
+        
+        if (result.ok) {
+          currentStudentData = {
+            student: result.student,
+            team: result.team || [],
+            comments: result.comments || []
+          };
+          
+          renderOverview(result.student);
+          renderTeam(result.team || []);
+          renderContact(result.student);
+          renderComments(result.comments || []);
+          
+          historyOffset = 0;
+          allHistorySessions = [];
+          renderHistory();
+        } else {
+          alert('Failed to load student: ' + result.error);
+          backToList();
+        }
+      } catch (e) {
+        console.error('Failed to load student:', e);
+        alert('Failed to load student');
+        backToList();
+      } finally {
+        FunnyLoading.hide();
+      }
+    }
+    
+    function backToList() {
+      currentStudentId = null;
+      currentStudentData = null;
+      historyOffset = 0;
+      historyHasMore = false;
+      allHistorySessions = [];
+      
+      $('profileView').classList.add('hidden');
+      $('listView').classList.remove('hidden');
+      
+      renderStudentList($('searchInput').value);
+    }
+    
+    function renderOverview(student) {
+      if (student.bio) {
+        $('studentBio').textContent = student.bio;
+        $('bioSection').style.display = 'block';
+      } else {
+        $('bioSection').style.display = 'none';
+      }
+      
+      // Past Courses field
+      const pastCourses = student.past_courses || '';
+      $('pastCoursesDisplay').value = pastCourses;
+      
+      // Additional Notes field
+      const notes = student.additional_notes || student.info || '';
+      $('studentNotes').innerHTML = notes ? linkify(escapeHtml(notes)) : '<em>No additional notes</em>';
+      
+      // Reset comments lazy load
+      $('loadCommentsBtn').style.display = 'block';
+      $('commentsCard').style.display = 'none';
+    }
+    
+    function renderContact(student) {
+      const email = student.email ||
+        student.family_email ||
+        student.family_additional_email ||
+        student.additional_email ||
+        'Not provided';
+      $('contactEmail').textContent = email;
+      
+      const phone = student.mobile_phone ||
+        student.home_phone ||
+        student.family_home_phone ||
+        'Not provided';
+      $('contactPhone').textContent = phone;
+      
+      const emergencyContact = student.family_first || student.family_last
+        ? `${student.family_first} ${student.family_last}`.trim() + 
+          (student.family_mobile ? ` - ${student.family_mobile}` : '') +
+          (student.family_home ? ` (Home: ${student.family_home})` : '') +
+          (student.family_email ? ` - ${student.family_email}` : '')
+        : 'Not provided';
+      
+      $('contactEmergency').innerHTML = emergencyContact;
+    }
+    
+    function renderTeam(team) {
+      const container = $('tutorsList');
+      
+      if (!team || team.length === 0) {
+        container.innerHTML = '<div class="empty-state">No tutors linked to this student yet.</div>';
+        return;
+      }
+      
+      const linkMap = window.cachedLinkMap?.[currentStudentId] || [];
+      
+      container.innerHTML = team.map(t => {
+        const tutor = tutorDirectory[t.tutor_id] || {};
+        const name = `${tutor.first_name || ''} ${tutor.last_name || ''}`.trim() || t.tutor_id;
+        
+        const link = linkMap.find(l => l.tutor_id === t.tutor_id && l.subject === t.subject);
+        const lastSeen = link?.last_seen || 'Unknown';
+        
+        return `
+          <div class="tutor-chip" 
+               data-tutor-id="${t.tutor_id}" 
+               data-last-seen="${lastSeen}"
+               onclick="TutorDialog.open('${t.tutor_id}')"
+               onmouseenter="TooltipManager.show('Last seen: ${lastSeen}', this)"
+               onmouseleave="TooltipManager.hide()">
+            <span class="tutor-name">${escapeHtml(name)}</span>
+            ${t.subject ? `<span class="tutor-subject">${escapeHtml(t.subject)}</span>` : ''}
+            ${t.role ? `<span class="tutor-role ${t.role.toLowerCase().includes('group') ? 'group' : ''}">${escapeHtml(t.role)}</span>` : ''}
+          </div>
+        `;
+      }).join('');
+    }
+    
+    // ==================== HISTORY TAB ====================
+    async function renderHistory(loadMore = false) {
+      const container = $('historyList');
+      
+      if (!loadMore) {
+        container.innerHTML = '<div class="empty-state">Loading session history...</div>';
+      }
+      
+      try {
+        const result = await apiCall('studentHistory', {
+          studentId: currentStudentId,
+          offset: historyOffset,
+          limit: 5
+        });
+        
+        if (result.ok) {
+          if (!loadMore) {
+            allHistorySessions = result.sessions || [];
+          } else {
+            allHistorySessions = allHistorySessions.concat(result.sessions || []);
+          }
+          
+          historyHasMore = result.hasMore || false;
+          historyOffset += (result.sessions || []).length;
+          
+          if (allHistorySessions.length === 0) {
+            container.innerHTML = '<div class="empty-state">No session history found for this student.</div>';
+            return;
+          }
+          
+          const sessionsHtml = allHistorySessions.map((s, idx) => {
+            const tutor = tutorDirectory[s.employee_id] || {};
+            const tutorName = `${tutor.first_name || ''} ${tutor.last_name || ''}`.trim() || s.employee_id;
+            const datetime = formatSessionDateTime(s.datetime_iso);
+            const status = s.status || 'Unknown';
+            
+            return `
+              <div class="history-item" onclick="openSessionModal(${idx})">
+                <div class="history-item-left">
+                  <div class="history-item-date">${datetime}</div>
+                  <div class="history-item-tutor">with ${escapeHtml(tutorName)}</div>
+                </div>
+                <div class="history-item-status ${getStatusClass(status)}">
+                  ${formatStatusBadge(status)}
+                </div>
+              </div>
+            `;
+          }).join('');
+          
+          const showMoreBtn = historyHasMore 
+            ? '<button class="history-show-more" id="historyShowMoreBtn" onclick="window.loadMoreHistory()">Show More…</button>'
+            : '';
+          
+          container.innerHTML = sessionsHtml + showMoreBtn;
+        } else {
+          container.innerHTML = `<div class="empty-state">Failed to load history: ${result.error}</div>`;
+        }
+      } catch (e) {
+        console.error('Failed to load history:', e);
+        container.innerHTML = '<div class="empty-state">Failed to load session history</div>';
+      }
+    }
+    
+    function openSessionModal(index) {
+      if (allHistorySessions[index]) {
+        SessionModal.open(allHistorySessions[index]);
+      }
+    }
+    
+    window.loadMoreHistory = async function() {
+      const btn = $('historyShowMoreBtn');
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = 'Loading...';
+      }
+      
+      await renderHistory(true);
+    };
+    
+    function formatSessionDateTime(isoString) {
+      if (!isoString) return 'Unknown date';
+      
+      const date = new Date(isoString);
+      const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+      const dayName = days[date.getDay()];
+      
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      const year = String(date.getFullYear()).slice(-2);
+      
+      let hours = date.getHours();
+      const minutes = String(date.getMinutes()).padStart(2, '0');
+      const ampm = hours >= 12 ? 'PM' : 'AM';
+      hours = hours % 12 || 12;
+      
+      return `${dayName} ${month}/${day}/${year} ${hours}:${minutes} ${ampm}`;
+    }
+    
+    function formatStatusBadge(status) {
+      const normalized = status.toLowerCase();
+      
+      if (normalized.includes('attend') || normalized.includes('present')) {
+        return '✅ Attended';
+      } else if (normalized.includes('miss') || normalized.includes('absent')) {
+        return '❌ Missed';
+      } else if (normalized.includes('cancel')) {
+        return '🚫 Cancelled';
+      }
+      
+      return status;
+    }
+    
+    function getStatusClass(status) {
+      const normalized = status.toLowerCase();
+      
+      if (normalized.includes('attend') || normalized.includes('present')) {
+        return 'attended';
+      } else if (normalized.includes('miss') || normalized.includes('absent')) {
+        return 'missed';
+      } else if (normalized.includes('cancel')) {
+        return 'cancelled';
+      }
+      
+      return '';
+    }
+    
+    // ==================== COMMENTS ====================
+    function renderComments(comments) {
+      const container = $('commentsSection');
+      
+      if (!comments || comments.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">No comments yet. Be the first to add one!</div>
+          <div class="comment-form">
+            <textarea id="commentInput" class="comment-textarea" placeholder="Add a comment..."></textarea>
+            <button id="submitCommentBtn" class="comment-submit">Post Comment</button>
+          </div>
+        `;
+        return;
+      }
+      
+      const linkMap = window.cachedLinkMap?.[currentStudentId] || [];
+      
+      const commentsHtml = comments.map(c => {
+        const tutor = tutorDirectory[c.tutor_id] || {};
+        const name = `${tutor.first_name || ''} ${tutor.last_name || ''}`.trim() || c.tutor_id;
+        
+        const links = linkMap.filter(l => l.tutor_id === c.tutor_id);
+        let lastSeen = 'Unknown';
+        if (links.length > 0) {
+          const dates = links.map(l => l.last_seen).filter(d => d !== 'Unknown');
+          if (dates.length > 0) {
+            lastSeen = dates.sort().reverse()[0];
+          }
+        }
+        
+        return `
+          <div class="comment-item">
+            <div class="comment-header">
+              <span class="comment-author"
+                    onclick="TutorDialog.open('${c.tutor_id}')"
+                    onmouseenter="TooltipManager.show('Last seen: ${lastSeen}', this)"
+                    onmouseleave="TooltipManager.hide()">
+                ${escapeHtml(name)}
+              </span>
+              <span class="comment-time">${formatTimestamp(c.timestamp)}</span>
+            </div>
+            <div class="comment-body">${linkify(escapeHtml(c.body))}</div>
+          </div>
+        `;
+      }).join('');
+      
+      container.innerHTML = commentsHtml + `
+        <div class="comment-form">
+          <textarea id="commentInput" class="comment-textarea" placeholder="Add a comment..."></textarea>
+          <button id="submitCommentBtn" class="comment-submit">Post Comment</button>
+        </div>
+      `;
+    }
+    
+    async function submitComment() {
+      const input = $('commentInput');
+      const body = input.value.trim();
+      
+      if (!body) return;
+      
+      const btn = $('submitCommentBtn');
+      btn.disabled = true;
+      btn.textContent = 'Posting...';
+      
+      try {
+        const result = await apiCall('addComment', {
+          studentId: currentStudentId,
+          body
+        });
+        
+        if (result.ok) {
+          input.value = '';
+          
+          const newComment = {
+            tutor_id: currentUser.tutor_id,
+            timestamp: result.timestamp || new Date().toISOString(),
+            body
+          };
+          
+          if (currentStudentData && currentStudentData.comments) {
+            currentStudentData.comments.unshift(newComment);
+            renderComments(currentStudentData.comments);
+          }
+        } else {
+          alert('Failed to post comment: ' + result.error);
+        }
+      } catch (e) {
+        console.error('Failed to post comment:', e);
+        alert('Failed to post comment');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Post Comment';
+      }
+    }
+    
+    // ==================== TABS ====================
+    function switchTab(tabName) {
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.tab === tabName);
+      });
+      
+      document.querySelectorAll('.tab-content').forEach(content => {
+        content.classList.toggle('active', content.id === `${tabName}Tab`);
+      });
+      
+      if (tabName === 'history' && allHistorySessions.length === 0) {
+        renderHistory();
+      }
+    }
+    
+    // ==================== EDIT NOTES MODAL ====================
+    function openNotesModal() {
+      const current = $('studentNotes').textContent;
+      $('notesTextarea').value = current === 'No additional notes' ? '' : current;
+      $('editNotesModal').classList.remove('hidden');
+    }
+    
+    function closeNotesModal() {
+      $('editNotesModal').classList.add('hidden');
+    }
+    
+    async function saveNotes() {
+      const newNotes = $('notesTextarea').value.trim();
+      
+      const btn = $('notesSave');
+      btn.disabled = true;
+      btn.textContent = 'Saving...';
+      
+      try {
+        const result = await apiCall('updateStudentNotes', {
+          studentId: currentStudentId,
+          notes: newNotes
+        });
+        
+        if (result.ok) {
+          $('studentNotes').innerHTML = newNotes ? linkify(escapeHtml(newNotes)) : '<em>No additional notes</em>';
+          
+          const student = allStudents.find(s => s.student_id === currentStudentId);
+          if (student) {
+            student.additional_notes = newNotes;
+          }
+          
+          closeNotesModal();
+        } else {
+          alert('Failed to save notes: ' + result.error);
+        }
+      } catch (e) {
+        console.error('Failed to save notes:', e);
+        alert('Failed to save notes');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Save';
+      }
+    }
+    
+    // ==================== EDIT PAST COURSES MODAL ====================
+    function openPastCoursesModal() {
+      const current = $('pastCoursesDisplay').value;
+      $('pastCoursesTextarea').value = current;
+      $('editPastCoursesModal').classList.remove('hidden');
+      setTimeout(() => $('pastCoursesTextarea').focus(), 100);
+    }
+    
+    function closePastCoursesModal() {
+      $('editPastCoursesModal').classList.add('hidden');
+    }
+    
+    async function savePastCourses() {
+      const newPastCourses = $('pastCoursesTextarea').value.trim();
+      
+      const btn = $('pastCoursesSave');
+      btn.disabled = true;
+      btn.textContent = 'Saving...';
+      
+      try {
+        // BACKEND TODO: Implement appendPastCourses endpoint
+        const result = await apiCall('appendPastCourses', {
+          studentId: currentStudentId,
+          pastCourses: newPastCourses
+        });
+        
+        if (result.ok) {
+          $('pastCoursesDisplay').value = newPastCourses;
+          
+          const student = allStudents.find(s => s.student_id === currentStudentId);
+          if (student) {
+            student.past_courses = newPastCourses;
+          }
+          
+          if (currentStudentData && currentStudentData.student) {
+            currentStudentData.student.past_courses = newPastCourses;
+          }
+          
+          closePastCoursesModal();
+        } else {
+          alert('Failed to save past courses: ' + result.error);
+        }
+      } catch (e) {
+        console.error('Failed to save past courses:', e);
+        alert('Failed to save past courses. Check that backend endpoint exists.');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Save';
+      }
+    }
+    
+    // ==================== UTILITIES ====================
+    function linkify(text) {
+      let out = text;
+      
+      // Handle full URLs with protocol
+      out = out.replace(
+        /(https?:\/\/[^\s<]+)/gi,
+        '<a href="$1" target="_blank" rel="noopener noreferrer" class="link-btn">$1</a>'
+      );
+      
+      // Handle URLs without protocol
+      out = out.replace(
+        /(^|[\s>])((?:www\.)?[a-z0-9][-a-z0-9]*(?:\.[a-z0-9][-a-z0-9]*)+(?:\/[^\s<]*)?)/gi,
+        function(match, prefix, url) {
+          if (match.includes('href=')) return match;
+          
+          const href = url.startsWith('www.') || url.startsWith('http') 
+            ? (url.startsWith('http') ? url : 'http://' + url)
+            : 'http://' + url;
+          
+          return `${prefix}<a href="${href}" target="_blank" rel="noopener noreferrer" class="link-btn">${url}</a>`;
+        }
+      );
+      
+      out = out.replace(/\n/g, '<br>');
+      
+      return out;
+    }
+    
+    function formatTimestamp(iso) {
+      if (!iso) return '';
+      const date = new Date(iso);
+      const now = new Date();
+      const diffMs = now - date;
+      const diffMins = Math.floor(diffMs / 60000);
+      
+      if (diffMins < 1) return 'just now';
+      if (diffMins < 60) return `${diffMins}m ago`;
+      
+      const diffHours = Math.floor(diffMins / 60);
+      if (diffHours < 24) return `${diffHours}h ago`;
+      
+      const diffDays = Math.floor(diffHours / 24);
+      if (diffDays < 7) return `${diffDays}d ago`;
+      
+      return date.toLocaleDateString();
+    }
+    
+    // ==================== EVENT LISTENERS ====================
+    $('loginBtn').addEventListener('click', login);
+    $('empIdInput').addEventListener('keypress', (e) => { 
+      if (e.key === 'Enter') login(); 
+    });
+    $('logoutBtn').addEventListener('click', logout);
+    $('homeBtn').addEventListener('click', backToList);
+    $('backBtn').addEventListener('click', backToList);
+    $('searchInput').addEventListener('input', (e) => renderStudentList(e.target.value));
+    
+    $('editNotesBtn').addEventListener('click', openNotesModal);
+    $('editPastCoursesBtn').addEventListener('click', openPastCoursesModal);
+    
+    $('loadCommentsBtn').addEventListener('click', () => {
+      $('loadCommentsBtn').style.display = 'none';
+      $('commentsCard').style.display = 'block';
+      if (currentStudentData && currentStudentData.comments) {
+        renderComments(currentStudentData.comments);
+      }
+    });
+    
+    $('notesSave').addEventListener('click', saveNotes);
+    $('pastCoursesSave').addEventListener('click', savePastCourses);
+    
+    ['notesModalClose', 'notesCancel'].forEach(id => {
+      $(id).addEventListener('click', closeNotesModal);
+    });
+    
+    ['pastCoursesModalClose', 'pastCoursesCancel'].forEach(id => {
+      $(id).addEventListener('click', closePastCoursesModal);
+    });
+    
+    $('editNotesModal').addEventListener('click', (e) => {
+      if (e.target === $('editNotesModal')) closeNotesModal();
+    });
+    
+    $('editPastCoursesModal').addEventListener('click', (e) => {
+      if (e.target === $('editPastCoursesModal')) closePastCoursesModal();
+    });
+    
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => switchTab(btn.getAttribute('data-tab')));
+    });
+    
+    document.addEventListener('click', (e) => {
+      if (e.target.id === 'submitCommentBtn') {
+        submitComment();
+      }
+    });
+    
+    document.addEventListener('keypress', (e) => {
+      if (e.target.id === 'commentInput' && e.key === 'Enter' && e.ctrlKey) {
+        submitComment();
+      }
+    });
+    
+    showLogin();
+  </script>
+</body>
+</html>
